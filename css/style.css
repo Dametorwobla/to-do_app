@@ -1,0 +1,40 @@
+:root {
+    font-size: 18px;
+}
+
+:root[data-theme="theme-dark"]{
+    --bg-color: hsl(235, 21%, 11%);
+    --card-bg: hsl(235, 24%, 19%);
+    --text-color: hsl(0, 0%, 73%);
+    --inactive-color:hsl(234,11%,52%);
+    --active-color: hsl(234,39%, 85%);
+    --hover-color: hsl(236,33%, 92%);
+    --check-color: hsl(233, 14%, 35%);
+    --shadow-color: hsla(0, 0%, 7%, 0.877);
+    --plus-color: white;
+    --bg-img-mobile: url(./../images/bg-mobile-dark.jpg);
+    --bg-img-desktop: url(./../images/bg-desktop-dark.jpg);
+}
+
+:root[data-theme="theme-light"] {
+    --bg-color: hsl(236, 33%, 92%);
+    --card-bg: hsl(0, 0%, 98%);
+    --text-color: hsl(0, 0%, 26%);
+    --inactive-color: hsl(236, 9%, 61%);
+    --active-color: hsl(220, 98%, 61%);
+    --hover-color: hsl(235, 19%, 35%);
+    --check-color: hsl(233, 11%, 84%);
+    --shadow-color: hsla(240, 5%, 85%, 0.603);
+    --plus-color: black;
+    --bg-img-mobile: url(./../images/bg-mobile-light.jpg);
+    --bg-img-desktop: url(./../images/bg-desktop-light.jpg);
+  }
+
+*{
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: "Josefin Sans", sans-serif;
+}
+
