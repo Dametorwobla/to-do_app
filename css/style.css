@@ -38,3 +38,57 @@
     font-family: "Josefin Sans", sans-serif;
 }
 
+a, button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+a{
+    text-decoration: none;
+    color: var(--inactive-color);
+}
+
+body{
+    width: 100%;
+    background-image: var(--bg-img-mobile);
+    background-color: var(--bg--color);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: contain;
+    min-height:100vh;
+}
+
+main{
+    width: inherit;
+    min-height: inherit;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack:center;
+            justify-content: center;
+    -webkit-box-align:center;
+        -ms-flex-align:center;
+            align-items:center;
+}
+
+section.wrapper{
+    width: 90%;
+    min-height: 90vh;
+    display: -webkit-box;
+    display: -msflexbox;
+    display: flex;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    overflow:hidden;
+}
