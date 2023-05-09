@@ -120,3 +120,65 @@ header{
     padding-top: 0.3rem;
     background-color: transparent;
 }
+
+header h1{
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 7px;
+    color: white;
+}
+
+button {
+    cursor: pointer;
+}
+
+.btn {
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    background-color: transparent;
+}
+
+.theme-btn {
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+}
+
+form {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align:center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    color: var(--card-color);
+    height: 2.9rem;
+    padding: 0.5rem 0rem 0.5rem 1rem;
+}
+
+form span{
+    width: 25px;
+    height: 25px;
+    border: 2px solid var(--check-color);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
