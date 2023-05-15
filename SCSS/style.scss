@@ -1,0 +1,15 @@
+@import "mixins";
+
+//Responsive Breakpoints
+$mobile: 23.43rem;
+$desktop: 56.88rem;
+
+//Font variables
+$font-size: 18px;
+$normal: 400;
+$bold: 700;
+
+$height: 2.9rem;
+$border-radius: 4px;
+$check-background: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+$active: hsl(220, 98%, 61%);
