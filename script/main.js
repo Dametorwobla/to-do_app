@@ -146,5 +146,50 @@ function addTodo(e){
            e.target.closest('div.todo-item').classList.add('slide');
            e.target.closest('div.todo-item').addEventListener('animationend', removeTodo.bind(this, todoItem));
         }
-    })
+    });
+
+    todoItem.addEventListener('dragstart', e => {
+        console.log('dragstart');
+        todoItem.classList.add('ondrag');
+    });
+
+    todoItem.addEventListener('dragend', e => {
+        console.log('dragend');
+        todoItem.classList.remove('ondrag');
+    });
+
+    todoUl.addEventListener('dragover', e => {
+        e.preventDefault();
+        const afterElement = getDragAfterElement(todoUl, e.clientry)
+        const draggable = document.querySelector('.ondrag')
+        if (afterElement == null) {
+            todoUl.appendChild(draggable)
+        } else{
+            todoUl.insertBefore(draggable, afterElement)
+        }
+    });
+}
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.todo-item:not(.ondrag)')]
+
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child }
+        } else {
+            return closest
+        }
+    }, {offset: Number.NEGATIVE_INFINITY }).element
+}
+//function for removing todo
+function removeTodo(todoItem) {
+    todoItem.remove();
+    toggleEmptyContainer();
+    activeTodoCount();
+}
+
+function clearCompletedHandler(e) {
+    e.preventDefault();
 }
