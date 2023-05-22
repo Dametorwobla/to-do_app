@@ -192,4 +192,60 @@ function removeTodo(todoItem) {
 
 function clearCompletedHandler(e) {
     e.preventDefault();
+    const completedTodos = todoUl.querySelectorAll('.todo-item.strike');
+    if (completedTodos.length === 0) return;
+    completedTodos.forEach(completedTodo => {
+        // completedTodo.remove();
+        completedTodo.querySelector('.delete').click();
+    })
+    toggleEmptyContainer();
+}
+
+function filterHandler(className = 'all') {
+    const allTodo = [...todoUl.querySelectorAll('.todo-item')];
+
+    switch(className) {
+        case 'completed':
+            if (todoUl.querySelectorAll('.strike').length === 0) {
+                alert('No completed items left');
+                return;
+            }
+            allTodo.forEach(todo => {
+                if (todo.classList.contains('strike')) {
+                    todo.style.display = 'flex';
+                } else {
+                    todo.style.display = 'none';
+                }
+            });
+            break;
+        case 'live':
+            if (todoUl.querySelectorAll('.strike').length === allTodo.length) {
+                alert('No active items left!');
+                return;
+            }
+            allTodo.forEach(todo => {
+                if (!todo.classList.contains('strike')) {
+                    todo.style.display = 'flex';
+                } else {
+                    todo.style.display = 'none';
+                }
+            })
+            break;
+        case 'all':
+            allTodo.forEach(todo => {
+                todo.removeAttribute('style');
+            });
+            break;
+    }
+}
+
+function filterBtnsHandler(e) {
+    e.preventDefault();
+    const allBtn = this.querySelector('.all')
+    const liveBtn = this.querySelector('.live')
+    const completedBtn = this.querySelector('.completed-btn')
+    
+    let refValue;
+
+    
 }
