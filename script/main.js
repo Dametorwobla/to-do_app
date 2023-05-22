@@ -192,4 +192,88 @@ function removeTodo(todoItem) {
 
 function clearCompletedHandler(e) {
     e.preventDefault();
+    const completedTodos = todoUl.querySelectorAll('.todo-item.strike');
+    if (completedTodos.length === 0) return;
+    completedTodos.forEach(completedTodo => {
+        // completedTodo.remove();
+        completedTodo.querySelector('.delete').click();
+    })
+    toggleEmptyContainer();
 }
+
+function filterHandler(className = 'all') {
+    const allTodo = [...todoUl.querySelectorAll('.todo-item')];
+
+    switch(className) {
+        case 'completed':
+            if (todoUl.querySelectorAll('.strike').length === 0) {
+                alert('No completed items left');
+                return;
+            }
+            allTodo.forEach(todo => {
+                if (todo.classList.contains('strike')) {
+                    todo.style.display = 'flex';
+                } else {
+                    todo.style.display = 'none';
+                }
+            });
+            break;
+        case 'live':
+            if (todoUl.querySelectorAll('.strike').length === allTodo.length) {
+                alert('No active items left!');
+                return;
+            }
+            allTodo.forEach(todo => {
+                if (!todo.classList.contains('strike')) {
+                    todo.style.display = 'flex';
+                } else {
+                    todo.style.display = 'none';
+                }
+            })
+            break;
+        case 'all':
+            allTodo.forEach(todo => {
+                todo.removeAttribute('style');
+            });
+            break;
+    }
+}
+
+function filterBtnsHandler(e) {
+    e.preventDefault();
+    const allBtn = this.querySelector('.all')
+    const liveBtn = this.querySelector('.live')
+    const completedBtn = this.querySelector('.completed-btn')
+    
+    let refValue;
+
+    if (e.target.classList.contains('completed-btn')) {
+        refValue = 'completed';
+        allBtn.classList.remove('active');
+        liveBtn.classList.remove('active');
+        completedBtn.classList.add('active');
+    } else if (e.target.classList.contains('live')) {
+        refValue = 'live';
+        allBtn.classList.remove('active');
+        liveBtn.classList.add('active');
+        completedBtn.classList.remove('active');
+    } else if (e.target.classList.contains('all')) {
+        refValue = 'all';
+        allBtn.classList.add('active');
+        liveBtn.classList.remove('active');
+        completedBtn.classList.remove('active');
+    }
+
+    filterHandler(refValue);
+}
+
+//event listeners
+window.addEventListener('DOMContentLoaded', () => {
+    toggleEmptyContainer();
+    changeUI();
+});
+window.addEventListener('resize', changeUI);
+themeBtn.addEventListener('click', toggleTheme);
+addTodoBtn.addEventListener('click', addTodo);
+clearCompletedBtn.addEventListener('click', clearCompletedHandler);
+filterBox.addEventListener('click', filterBtnsHandler);
