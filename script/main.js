@@ -247,5 +247,33 @@ function filterBtnsHandler(e) {
     
     let refValue;
 
-    
+    if (e.target.classList.contains('completed-btn')) {
+        refValue = 'completed';
+        allBtn.classList.remove('active');
+        liveBtn.classList.remove('active');
+        completedBtn.classList.add('active');
+    } else if (e.target.classList.contains('live')) {
+        refValue = 'live';
+        allBtn.classList.remove('active');
+        liveBtn.classList.add('active');
+        completedBtn.classList.remove('active');
+    } else if (e.target.classList.contains('all')) {
+        refValue = 'all';
+        allBtn.classList.add('active');
+        liveBtn.classList.remove('active');
+        completedBtn.classList.remove('active');
+    }
+
+    filterHandler(refValue);
 }
+
+//event listeners
+window.addEventListener('DOMContentLoaded', () => {
+    toggleEmptyContainer();
+    changeUI();
+});
+window.addEventListener('resize', changeUI);
+themeBtn.addEventListener('click', toggleTheme);
+addTodoBtn.addEventListener('click', addTodo);
+clearCompletedBtn.addEventListener('click', clearCompletedHandler);
+filterBox.addEventListener('click', filterBtnsHandler);
