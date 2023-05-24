@@ -8,14 +8,72 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"
+    />
   <link rel="stylesheet" href="./css/style.css">
   <title>David Ametorwobla | Todo app</title>
+
+  <script src ="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+ 
+
   <script src="./script/main.js" defer></script>
+
   
 </head>
 
-<body>
+<body class="body">
+  <div class="header"></div>
   <main>
+
+    <div class="content">
+      <h2 class="content_title">TODO</h2>
+      <!--Dark Mode Swich -->
+      <div class="theme-switch-wrapper">
+        <span class="toggle-icon">
+          <img class="icon" src="./images/icon-light.svg" alt="" />
+        </span>
+        <label class="theme-switch">
+          <input class="input_darkmode" type="checkbox" />
+        </label>
+      </div>
+    </div>
+
+    <form class="addTodo">
+      <button type="submit" class="btn addNewBtn" aria-label="button">
+        <span class="plusSign custom_checkbox">+</span>
+      </button>
+      <input
+        class="addNew"
+        name="add"
+        type="text"
+        id="create"
+        placeholder="Create a new todo..."
+        aria-label="Create a new todo..."
+      />
+    </form>
+
+    <div class="container">
+      <div class="alert"></div>
+      <div class="card">
+        <div>
+          <ul class="tasks"></ul>
+        </div>
+
+        <div class="task items_left">
+          <p class="counter">5 items left</p>
+          <button class="btn clear">Clear Completed</button>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="buttons filter-todos">
+          <button class="btn all active" value="all">All</button>
+          <button class="btn activeBtn" value="active">Active</button>
+          <button class="btn completed" value="completed">Completed</button>
+        </div>
+
     <section class="wrapper">
       <header>
         <h1>TODO</h1>
@@ -38,13 +96,32 @@
         <a href="#" class="filter-btns all active">All</a>
         <a href="#" class="filter-btns live">Active</a>
         <a href="#" class="filter-btns completed-btn">Completed</a>
+
       </div>
-      <p class="drag-help-info">Drag and drop to reorder list</p>
+    </div>
+    <footer class="attribution">
+      <p class="drag_text">Drag and drop to reorder list</p>
       <p class="author">
         Challenge by
-        <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.  Coded by <a href="https://github.com/dametorwobla" target="_blank">David Ametorwobla</a>.
+        <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+        Coded by <a href="https://github.com/dametorwobla" target="_blank">David Ametorwobla</a>.
       </p>
-    </section>
+    </footer>
   </main>
+
+  <template id="task-template">
+    <li class="task">
+      <input class="task-input" type="checkbox" />
+      <label>
+        <span class="custom_checkbox"></span>
+      </label>
+      <span class="deleteBtn">
+        <img class="delete" src="./images/icon-cross.svg" alt="" />
+      </span>
+    </li>
+  </template>
+
+  <script src="./script/dark.js" defer></script>
+  <script src="./script/main.js" defer></script>
 </body>
 </html>
