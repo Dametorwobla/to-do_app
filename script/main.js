@@ -1,5 +1,5 @@
 const html = document.documentElement;
-html.dataset.theme = `theme-light`;
+
 
 const themeBtn = document.querySelector('.theme-btn');
 const wrapper = document.querySelector('.wrapper');
@@ -11,8 +11,37 @@ const clearCompletedBtn = actions.querySelector('.clear-completed-btn');
 const filterBox = wrapper.querySelector('.filters');
 
 
+// Load theme from local storage
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      html.dataset.theme = savedTheme;
+      themeBtn.classList.add(savedTheme);
+    }
+}
+  
+// Save theme to local storage
+function saveTheme() {
+    const currentTheme = html.dataset.theme;
+    localStorage.setItem('theme', currentTheme);
+}
 
-//Even handler functions
+//Load todos from local storage
+function loadTodos() {
+    const savedTodos = localStorage.getItem('todos');
+    if  (savedTodos) {
+        todoUl.innerHTML = savedTodos;
+        toggleEmptyContainer();
+        activeTodoCount();
+    }
+}
+
+//Save todos to local storage
+function saveTodos() {
+    const todos = todoUl.innerHTML;
+    localStorage.setItem('todos', todos);
+}
+//Event handler functions
 
 //creating empty container
 function emptyGenerator() {
@@ -98,8 +127,8 @@ function activeTodoCount() {
 }
 
 //Adding todo
-function addTodo(e){
-    e.preventDefault();
+function addTodo(){
+    event.preventDefault();
     //getting input text
     const text = todoInput.value;
     if (text === '') return;
@@ -269,11 +298,30 @@ function filterBtnsHandler(e) {
 
 //event listeners
 window.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
     toggleEmptyContainer();
     changeUI();
+    loadTodos();
 });
+
 window.addEventListener('resize', changeUI);
-themeBtn.addEventListener('click', toggleTheme);
-addTodoBtn.addEventListener('click', addTodo);
-clearCompletedBtn.addEventListener('click', clearCompletedHandler);
-filterBox.addEventListener('click', filterBtnsHandler);
+
+themeBtn.addEventListener('click', () => { 
+    toggleTheme();
+    saveTheme();
+});
+
+addTodoBtn.addEventListener('click', e => {
+    addTodo();
+    saveTodos();
+});
+
+clearCompletedBtn.addEventListener('click', e => {
+    clearCompletedHandler(e);
+    saveTodos();
+});
+
+filterBox.addEventListener('click', e => {
+    filterBtnsHandler(e);
+    saveTodos();
+});
