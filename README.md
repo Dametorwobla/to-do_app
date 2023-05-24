@@ -1,8 +1,3 @@
-[![Forks][forks-shield]](https://github.com/Dametorwobla/to-do_app/forks)
-[![Stargazers][stars-shield]](https://github.com/Dametorwobla/to-do_app/stargazers)
-[![Issues][issues-shield]](https://github.com/Dametorwobla/to-do_app/issues)
-[![LinkedIn][linkedin-shield]](https://www.linkedin.com/in/david-ametorwobla-353224a1/)
-
 # Project Title - To-do app
 
 ## Table of contents
