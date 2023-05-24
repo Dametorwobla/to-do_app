@@ -1,279 +1,247 @@
-const html = document.documentElement;
-html.dataset.theme = `theme-light`;
+const listContainer = document.querySelector('.tasks'); // ul
+const newTodoForm = document.querySelector('.addTodo'); // form
+const newTodoInput = document.querySelector('.addNew'); // input
+const listCountElement = document.querySelector('.counter'); //counter
+const taskTemplate = document.querySelector('#task-template'); // html template
+const alert = document.querySelector('.alert'); // alert
+const clearCompletedTaskBtn = document.querySelector('.clear'); // clear completed
 
-const themeBtn = document.querySelector('.theme-btn');
-const wrapper = document.querySelector('.wrapper');
-const todoInput = document.getElementById('todo-input');
-const addTodoBtn = document.querySelector('.add-todo'); 
-const todoUl = wrapper.querySelector('.todos');
-const actions = wrapper.querySelector('.actions');
-const clearCompletedBtn = actions.querySelector('.clear-completed-btn');
-const filterBox = wrapper.querySelector('.filters');
+// filtering
+const filterOptions = document.querySelector('.filter-todos');
+const allTaskBtn = document.querySelector('.all');
+const showActiveTodos = document.querySelector('.activeBtn');
+const showCompletedTodos = document.querySelector('.completed');
 
-
-
-//Even handler functions
-
-//creating empty container
-function emptyGenerator() {
-    const empty =  document.createElement('div');
-    empty.className = "empty-container";
-    empty.textContent = "No todo items left!";
-    return empty;
-}
-
-//themes toggler
-function toggleTheme() {
-    const themeIcon = themeBtn.querySelector('img');
-
-    if(themeBtn.classList.contains('light')) {
-       themeBtn.classList.remove('light');
-       themeBtn.classList.add('dark');
-       html.dataset.theme = 'theme-dark';
-       themeIcon.src = './images/icon-sun.svg';
-       themeIcon.alt = 'moon svg'; 
-    } else {
-        themeBtn.classList.remove('dark');
-        themeBtn.classList.add('light');
-        html.dataset.theme = 'theme-light';
-        themeIcon.src = './images/icon-moon.svg';
-        themeIcon.alt = 'sun svg';
-    }
-
-}
-
-//changing the UI while resizing the window
-function changeUI() {
-    if (window.innerWidth > 1200) {
-        actions.insertBefore(filterBox, clearCompletedBtn);
-        filterBox.classList.add('clea-margin')
-    } else {
-        wrapper.insertBefore(filterBox, document.querySelector('.drag-help-info'));
-        filterBox.classList.remove('clear-margin');
-    }
-}
-
-//checking for empty todo container
-function toggleEmptyContainer() {
-    switch (todoUl.childElementCount) {
-        case 0:
-            todoUl.append(emptyGenerator());
-            break;
-        default:
-            if (todoUl.querySelector('.empty-container')) {
-                todoUl.querySelector('.empty-container').remove();
-            };
-            break;
-    }
-}
-
-//generating todo item template
-function todoGenerator(text) {
-    const todoItem = document.createElement('div');
-    todoItem.className = 'todo-item';
-    todoItem.draggable = true;
-    todoItem.innerHTML =   `
-                        <label class="check-label">
-                            <input type="checkbox">
-                            <span class="check-round"></span>
-                        </label>
-                        <li class="todo">${text}</li>
-                        <button class=btn delete"><img src="./images/icon-cross.svg" alt="cross svg"></button>
-    `;
-
-    const label = todoItem.querySelector('label');
-    const li = todoItem.querySelector('li');
-    const button = todoItem.querySelector('button');
-
-    return [todoItem, label, li, button];
-}
-
-//counting active todos
-function activeTodoCount() {
-    const count = actions.querySelector('#count');
-    const wholeCount = todoUl.querySelectorAll('.todo-item').length;
-    const inactiveCount = todoUl.querySelectorAll('.todo-item.strike').length;
-    const activeCount = wholeCount - inactiveCount;
-    count.textContent = activeCount;
-}
-
-//Adding todo
-function addTodo(e){
-    e.preventDefault();
-    //getting input text
-    const text = todoInput.value;
-    if (text === '') return;
-    const [todoItem, checkLabel, todoLi, deleteBtn] = todoGenerator(text);
-
-    //adding todo
-    todoUl.append(todoItem);
-    toggleEmptyContainer();
-    activeTodoCount()
-
-    //clearing the input
-    todoInput.value = '';
-
-    //event delegation is used here.
-    todoItem.addEventListener('click', e => {
-        if (e.target === checkLabel || checkLabel.querySelector('span') || checkLabel.querySelector('input')) {
-            if (checkLabel.querySelector('input').checked) {
-                todoItem.classList.add('strike');
-                activeTodoCount();
-            } else {
-                todoItem.classList.remove('strike');
-                activeTodoCount();
-            }
-        }
-        /*Here "e.currentTarget" and "this" refers to the addTodoBtn.
-        It's because I am adding eventlistener to the todoItem
-        which is generated inside of the addTodoBtn's event handler
-        That's why i'm using e.target.closest('div.todo-item') to get the result without a bug.
-        console.log(e.target)*/
-
-        if (e.target === todoLi) {
-            if (e.target.closest('div.todo-item').classList.contains('strike')) {
-                e.target.closest('div.todo-item').classList.remove('strike');
-                checkLabel.querySelector('input').checked = false;
-                activeTodoCount();
-            } else {
-                e.target.closest('div.todo-item').classList.add('strike');
-                checkLabel.querySelector('input').checked = true;
-                activeTodoCount();
-            }
-        }
-
-        if(e.target === deleteBtn || e.target === deleteBtn.querySelector('img')) {
-           e.target.closest('div.todo-item').classList.add('slide');
-           e.target.closest('div.todo-item').addEventListener('animationend', removeTodo.bind(this, todoItem));
-        }
-    });
-
-    todoItem.addEventListener('dragstart', e => {
-        console.log('dragstart');
-        todoItem.classList.add('ondrag');
-    });
-
-    todoItem.addEventListener('dragend', e => {
-        console.log('dragend');
-        todoItem.classList.remove('ondrag');
-    });
-
-    todoUl.addEventListener('dragover', e => {
-        e.preventDefault();
-        const afterElement = getDragAfterElement(todoUl, e.clientY)
-        const draggable = document.querySelector('.ondrag')
-        if (afterElement == null) {
-            todoUl.appendChild(draggable)
-        } else{
-            todoUl.insertBefore(draggable, afterElement)
-        }
-    });
-}
-
-function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('.todo-item:not(.ondrag)')]
-
-    return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect()
-        const offset = y - box.top - box.height / 2
-        if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child }
-        } else {
-            return closest
-        }
-    }, {offset: Number.NEGATIVE_INFINITY }).element
-}
-//function for removing todo
-function removeTodo(todoItem) {
-    todoItem.remove();
-    toggleEmptyContainer();
-    activeTodoCount();
-}
-
-function clearCompletedHandler(e) {
-    e.preventDefault();
-    const completedTodos = todoUl.querySelectorAll('.todo-item.strike');
-    if (completedTodos.length === 0) return;
-    completedTodos.forEach(completedTodo => {
-        // completedTodo.remove();
-        completedTodo.remove();
-    })
-    toggleEmptyContainer();
-}
-
-function filterHandler(className = 'all') {
-    const allTodo = [...todoUl.querySelectorAll('.todo-item')];
-
-    switch(className) {
-        case 'completed':
-            if (todoUl.querySelectorAll('.strike').length === 0) {
-                alert('No completed items left');
-                return;
-            }
-            allTodo.forEach(todo => {
-                if (todo.classList.contains('strike')) {
-                    todo.style.display = 'flex';
-                } else {
-                    todo.style.display = 'none';
-                }
-            });
-            break;
-        case 'live':
-            if (todoUl.querySelectorAll('.strike').length === allTodo.length) {
-                alert('No active items left!');
-                return;
-            }
-            allTodo.forEach(todo => {
-                if (!todo.classList.contains('strike')) {
-                    todo.style.display = 'flex';
-                } else {
-                    todo.style.display = 'none';
-                }
-            })
-            break;
-        case 'all':
-            allTodo.forEach(todo => {
-                todo.removeAttribute('style');
-            });
-            break;
-    }
-}
-
-function filterBtnsHandler(e) {
-    e.preventDefault();
-    const allBtn = this.querySelector('.all')
-    const liveBtn = this.querySelector('.live')
-    const completedBtn = this.querySelector('.completed-btn')
-    
-    let refValue;
-
-    if (e.target.classList.contains('completed-btn')) {
-        refValue = 'completed';
-        allBtn.classList.remove('active');
-        liveBtn.classList.remove('active');
-        completedBtn.classList.add('active');
-    } else if (e.target.classList.contains('live')) {
-        refValue = 'live';
-        allBtn.classList.remove('active');
-        liveBtn.classList.add('active');
-        completedBtn.classList.remove('active');
-    } else if (e.target.classList.contains('all')) {
-        refValue = 'all';
-        allBtn.classList.add('active');
-        liveBtn.classList.remove('active');
-        completedBtn.classList.remove('active');
-    }
-
-    filterHandler(refValue);
-}
-
-//event listeners
-window.addEventListener('DOMContentLoaded', () => {
-    toggleEmptyContainer();
-    changeUI();
+new Sortable(listContainer, {
+  animation: 150,
+  ghostClass: 'blue-background-class',
 });
-window.addEventListener('resize', changeUI);
-themeBtn.addEventListener('click', toggleTheme);
-addTodoBtn.addEventListener('click', addTodo);
-clearCompletedBtn.addEventListener('click', clearCompletedHandler);
-filterBox.addEventListener('click', filterBtnsHandler);
+
+const LOCAL_STORAGE_LIST = 'task.todos';
+
+let todos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST)) || [
+  {
+    id: '1',
+    name: 'Complete online JavaScript course',
+    completed: false,
+  },
+  {
+    id: '2',
+    name: 'Jog around the park 3x',
+    completed: false,
+  },
+  {
+    id: '3',
+    name: '10 minutes meditation',
+    completed: false,
+  },
+  {
+    id: '4',
+    name: 'Read for 1 hour',
+    completed: false,
+  },
+  {
+    id: '5',
+    name: 'Pick up groceries',
+    completed: false,
+  },
+  {
+    id: '6',
+    name: 'Complete Todo App on Frontend Mentor',
+    completed: false,
+  },
+];
+
+const focusInput = () => {
+  newTodoInput.focus();
+};
+
+const createTask = name => {
+  let id = todos.length + 1;
+  return { id: id.toString(), name: name, completed: false };
+};
+
+const submitTodo = e => {
+  e.preventDefault();
+  const listName = newTodoInput.value;
+  console.log(listName);
+  if (listName === null || listName === '') {
+    alert.textContent = 'Write a task first';
+    alert.style.display = 'block';
+    setTimeout(() => {
+      alert.style.display = 'none';
+    }, 2000);
+    focusInput();
+    return;
+  }
+
+  const task = createTask(listName);
+  newTodoInput.value = null;
+  todos.push(task);
+  focusInput();
+  saveAndRender();
+};
+
+const isCompleted = e => {
+  if (e.target.tagName.toLowerCase() === 'input') {
+    const selectedTask = todos.find(task => task.id === e.target.id);
+    selectedTask.completed = e.target.checked;
+  }
+
+  renderTaskCount();
+  saveToLocalstorage();
+};
+
+const deleteTodo = e => {
+  if (e.target.tagName.toLowerCase() === 'img') {
+    const deleteTask = todos.filter(task => task.id !== e.target.id);
+    todos = deleteTask;
+    focusInput();
+    saveAndRender();
+  }
+  renderTaskCount();
+  saveToLocalstorage();
+};
+
+const filterTodos = e => {
+  if (
+    e.target.classList.contains('all') ||
+    e.target.classList.contains('activeBtn') ||
+    e.target.classList.contains('completed')
+  ) {
+    listContainer.innerHTML = '';
+  }
+
+  todos.map(todo => {
+    if (e.target === allTaskBtn) {
+      listContainer.innerHTML = '';
+      showActiveTodos.classList.remove('active');
+      allTaskBtn.classList.add('active');
+      showCompletedTodos.classList.remove('active');
+      console.log('All');
+      saveAndRender();
+      focusInput();
+    }
+
+    if (e.target === showActiveTodos) {
+      showActiveTodos.classList.add('active');
+      allTaskBtn.classList.remove('active');
+      showCompletedTodos.classList.remove('active');
+      if (!todo.completed) {
+        const taskElement = document.importNode(taskTemplate.content, true);
+        const checkbox = taskElement.querySelector('input');
+        checkbox.id = todo.id;
+        checkbox.checked = todo.completed;
+        const label = taskElement.querySelector('label');
+        label.htmlFor = todo.id;
+        label.append(todo.name);
+        const deleteBtn = taskElement.querySelector('img');
+        deleteBtn.id = todo.id;
+        listContainer.appendChild(taskElement);
+      }
+    }
+
+    if (e.target === showCompletedTodos) {
+      showActiveTodos.classList.remove('active');
+      allTaskBtn.classList.remove('active');
+      showCompletedTodos.classList.add('active');
+      if (todo.completed) {
+        const taskElement = document.importNode(taskTemplate.content, true);
+        const checkbox = taskElement.querySelector('input');
+        checkbox.id = todo.id;
+        checkbox.checked = todo.completed;
+        const label = taskElement.querySelector('label');
+        label.htmlFor = todo.id;
+        label.append(todo.name);
+        const deleteBtn = taskElement.querySelector('img');
+        deleteBtn.id = todo.id;
+        listContainer.appendChild(taskElement);
+      }
+    }
+  });
+};
+
+const renderTaskCount = () => {
+  const incompleteTaskCount = todos.filter(task => !task.completed).length;
+  const taskString = incompleteTaskCount === 1 || incompleteTaskCount === 0 ? 'item' : 'items';
+  listCountElement.innerHTML = `${incompleteTaskCount} ${taskString} left`;
+};
+
+const clearCompletedTodos = () => {
+  const clearCompleted = todos.filter(task => !task.completed);
+  allTaskBtn.classList.add('active');
+  showCompletedTodos.classList.remove('active');
+  if (clearCompleted.length === todos.length) {
+    alert.style.display = 'block';
+    alert.textContent = 'Tick one or more items first';
+    setTimeout(() => {
+      alert.style.display = 'none';
+    }, 1500);
+  }
+
+  if (clearCompleted.length !== todos.length) {
+    alert.style.display = 'block';
+    alert.textContent = `Deleted`;
+    setTimeout(() => {
+      alert.style.display = 'none';
+    }, 1500);
+  }
+
+  if (clearCompleted.length === 0 && todos.length === 0) {
+    alert.style.display = 'block';
+    alert.textContent = `No item left`;
+    setTimeout(() => {
+      alert.style.display = 'none';
+    }, 1500);
+  }
+  todos = clearCompleted;
+  saveAndRender();
+};
+
+const renderTasks = selectedList => {
+  clearElement(listContainer);
+  todos.forEach(todo => {
+    const taskElement = document.importNode(taskTemplate.content, true);
+    const checkbox = taskElement.querySelector('input');
+    checkbox.id = todo.id;
+    checkbox.checked = todo.completed;
+    const label = taskElement.querySelector('label');
+    label.htmlFor = todo.id;
+    label.append(todo.name);
+    const deleteBtn = taskElement.querySelector('img');
+    deleteBtn.id = todo.id;
+    listContainer.appendChild(taskElement);
+  });
+  renderTaskCount(selectedList);
+  saveToLocalstorage();
+};
+
+const clearElement = element => {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+};
+
+const saveAndRender = () => {
+  saveToLocalstorage();
+  renderTasks();
+};
+
+const saveToLocalstorage = () => {
+  localStorage.setItem(LOCAL_STORAGE_LIST, JSON.stringify(todos));
+};
+
+const render = () => {
+  clearElement(listContainer);
+  renderTasks();
+  saveToLocalstorage();
+  focusInput();
+};
+
+listContainer.addEventListener('click', isCompleted);
+newTodoForm.addEventListener('submit', submitTodo);
+listContainer.addEventListener('click', deleteTodo);
+filterOptions.addEventListener('click', filterTodos);
+clearCompletedTaskBtn.addEventListener('click', clearCompletedTodos);
+
+render();
