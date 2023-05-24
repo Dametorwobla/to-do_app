@@ -39,7 +39,7 @@ Users should be able to:
 
 ### Screenshot
 
-![Desktop](./desktop_cover.png)
+![Desktop](./design/desktop-design-light.jpg)
 
 ### Links
 
