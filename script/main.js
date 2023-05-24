@@ -225,7 +225,7 @@ function clearCompletedHandler(e) {
     if (completedTodos.length === 0) return;
     completedTodos.forEach(completedTodo => {
         // completedTodo.remove();
-        completedTodo.remove();
+        completedTodo.querySelector('.delete').click();
     })
     toggleEmptyContainer();
 }
