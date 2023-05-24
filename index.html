@@ -14,14 +14,19 @@
     />
   <link rel="stylesheet" href="./css/style.css">
   <title>David Ametorwobla | Todo app</title>
+
   <script src ="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
  
+
+  <script src="./script/main.js" defer></script>
+
   
 </head>
 
 <body class="body">
   <div class="header"></div>
   <main>
+
     <div class="content">
       <h2 class="content_title">TODO</h2>
       <!--Dark Mode Swich -->
@@ -68,6 +73,30 @@
           <button class="btn activeBtn" value="active">Active</button>
           <button class="btn completed" value="completed">Completed</button>
         </div>
+
+    <section class="wrapper">
+      <header>
+        <h1>TODO</h1>
+        <button class="btn theme-btn light"><img src="./images/icon-moon.svg" alt="moon svg"></button>
+      </header>
+      <form>
+        <span class="round"></span>
+        <input type="text" id="todo-input" placeholder="Create a new todo...">
+        <button class="add-todo">+</button>
+      </form>  
+      <div class="todo-container">
+        <ul class="todos">
+        </ul>
+        <div class="actions">
+          <p class="left-items"><span id="count">0</span> items left</p>
+          <a href="#" class="clear-completed-btn">Clear Completed</a>
+        </div>
+      </div>
+      <div class="filters">
+        <a href="#" class="filter-btns all active">All</a>
+        <a href="#" class="filter-btns live">Active</a>
+        <a href="#" class="filter-btns completed-btn">Completed</a>
+
       </div>
     </div>
     <footer class="attribution">
