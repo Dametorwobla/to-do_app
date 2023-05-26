@@ -17,7 +17,7 @@
 ## Overview
 This is a solution to Amalitech's To-do app frontend project.
 - This app allows one to toggle between light and dark mode by clicking on the 
-  sun or moon icon on the wrapper image.
+  sun or moon icon on the header image.
 - Drag and drop feature allows one to reorder items on list. 
 
 ### The challenge
