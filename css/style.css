@@ -68,6 +68,8 @@ body {
   background: var(--Bright-Blue);
 }
 
+/*The code you provided targets the webkit-specific styling for the scrollbar track,
+ which is the background area behind the scrollbar thumb*/
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4);
   border-radius: 10px;
@@ -314,6 +316,10 @@ li::after {
   transition: transform 300ms ease-in-out;
 }
 
+/*This code is typically used to style a custom checkbox element when it is checked.
+ It sets the background image, size, 
+ and text color to create a customized appearance 
+ for the checked state of the checkbox.*/
 [type='checkbox']:checked + label .custom_checkbox {
   background-image: url('../images/icon-check.svg'), var(--Check-Background);
   background-repeat: no-repeat;
@@ -323,6 +329,11 @@ li::after {
   color: var(--Very-Light-Gray);
 }
 
+/*This code is typically used to style the label element associated with a checked checkbox,
+indicating that the corresponding task or item is completed or marked as done.
+The text-decoration property adds a line through the text,
+while the opacity property reduces the opacity of the label element, 
+giving it a faded appearance.*/
 [type='checkbox']:checked + label {
   text-decoration: line-through;
   opacity: 0.5;
@@ -385,6 +396,9 @@ li::after {
   text-decoration: underline;
 }
 
+/*The code below is a CSS media query written using the @media rule.
+It targets screens with a minimum width of 950 pixels.
+Within this media query, specific styles are applied to various elements on the page.*/
 @media screen and (min-width: 950px) {
   body {
     font-size: 1.8rem;
